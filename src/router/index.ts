@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+
 import TabsPage from '../views/TabsPage.vue'
 import SignupPageVue from '@/views/SignupPage.vue';
+
 
 const routes: Array<RouteRecordRaw> = [
   {
