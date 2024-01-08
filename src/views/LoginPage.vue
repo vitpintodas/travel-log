@@ -1,6 +1,6 @@
 <template>
   <div class="signup-form">
-    <h1>Inscription</h1>
+    <h1>Connexion</h1>
     <form @submit.prevent="handleSubmit">
       <form-field
         id="username"
@@ -18,15 +18,9 @@
         required
         placeholder="********"
       />
-      <form-field
-        id="confirm-password"
-        label="Confirmation du mot de passe"
-        type="password"
-        v-model="confirmPassword"
-        required
-        placeholder="********"
-      />
       <div class="form-group">
+        <button type="submit">Se connecter</button>
+
         <button type="submit">S'inscrire</button>
       </div>
     </form>
