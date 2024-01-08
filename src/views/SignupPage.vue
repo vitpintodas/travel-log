@@ -3,18 +3,28 @@
     <h1>Inscription</h1>
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
-        <label for="email">Adresse mail</label>
+        <label for="username">Nom d'utilisateur</label>
 
         <input
-          type="email"
-          id="email"
-          v-model="email"
+          type="username"
+          id="username"
+          v-model="username"
           required
-          placeholder="123@gmail.com"
+          placeholder="user123"
         />
       </div>
       <div class="form-group">
         <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          v-model="password"
+          required
+          placeholder="*****"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Confirmation du mot de passe</label>
         <input
           type="password"
           id="password"
