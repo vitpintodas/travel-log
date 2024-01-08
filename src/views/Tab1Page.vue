@@ -20,4 +20,11 @@
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
+
+/*
+import {inject} from 'vue';
+import { AUTH_SERVICE } from '@/security/auth-service';
+
+const authService = inject(AUTH_SERVICE);
+*/
 </script>
