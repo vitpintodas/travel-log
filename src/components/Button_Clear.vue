@@ -1,12 +1,18 @@
 <template>
-    <ion-button color="grey">Je suis un Bouton clair</ion-button>
+    <ion-button color="grey">{{buttonText}}</ion-button>
  </template>
  
  <script lang="ts">
    import { IonButton } from '@ionic/vue';
-   import { defineComponent } from 'vue';
+   import { defineComponent, PropType } from 'vue';
  
    export default defineComponent({
      components: { IonButton },
+      props: {
+        buttonText: {
+          type: String as PropType<string>,
+          default: 'Je suis un Bouton',
+        },
+      },
    });
  </script>

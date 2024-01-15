@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Button from '@/components/Button.vue';
 import Button_Clear from '@/components/Button_Clear.vue';
 import Button_Plus from '@/components/Button_Plus.vue';
