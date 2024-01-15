@@ -17,7 +17,7 @@
     </div>
   </template>
   
-  <script>
+  <script lang=ts>
   import TitleInput from '@/components/TitleInput.vue';
   import DescriptionInput from '@/components/DescriptionInput.vue';
   import PhotoInput from '@/components/PhotoInput.vue';

@@ -27,14 +27,9 @@
         placeholder="********"
       />
 
-      
       <div class="form-group">
-        <button type="submit">S'inscrire</button>
+        <Button @click="submitForm" :buttonText="'Inscription'" />
       </div>
-
-      
-
-      
       
     </form>
   </div>
@@ -59,7 +54,11 @@ export default {
     handleSubmit() {
       console.log("Submitted!");
     },
+    submitForm() {
+        console.log('Formulaire soumis !');
+      },
   }
+  
 };
 </script>
 
