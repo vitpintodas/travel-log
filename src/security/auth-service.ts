@@ -11,40 +11,36 @@ import { AuthRequest } from "./auth-request.model";
 /***********************************************************/
 const API_URL = "https://my-travel-log-cfax.onrender.com/api";
 
+let auth: AuthResponse | undefined = undefined;
+
 /**
  * Authentication service for login/logout.
  */
 export class AuthService {
-    #auth: AuthResponse | undefined;
-  //#auth$: ReplaySubject<AuthResponse | undefined>;
-
-  constructor() {
-    this.#auth = undefined;
-  }
 
   /**
    * @returns An `Observable` that will emit a `boolean` value
    * indicating whether the current user is authenticated.
    * This `Observable` will never complete and must be unsubscribed for when not needed.
    */
-  async isAuthenticated(): Promise<boolean> {
-    return !!this.#auth;
+  static async isAuthenticated(): Promise<boolean> {
+    return !!auth;
   }
 
   /**
    * @returns An `Observable` that will emit the currently authenticated `User` object only if there
    * currently is an authenticated user.
    */
-  async getUser(): Promise<User | undefined> {
-    return this.#auth?.user;
+  static async getUser(): Promise<User | undefined> {
+    return auth?.user;
   }
 
   /**
    * @returns An `Observable` that will emit the currently authenticated user's `token`, only if there
    * currently is an authenticated user.
    */
-  async getToken(): Promise<string | undefined> {
-    return this.#auth?.token;
+  static async getToken(): Promise<string | undefined> {
+    return auth?.token;
   }
 
   /**
@@ -54,12 +50,12 @@ export class AuthService {
    * @param authRequest An object containing the authentication request params
    * @returns An `Observable` that will emit the logged in `User` object on success.
    */
-  async logIn(authRequest: AuthRequest): Promise<User> {
+  static async logIn(authRequest: AuthRequest): Promise<User> {
     const authUrl = `${API_URL}/auth`;
     try
     {
         const {data: response} = await axios.post(authUrl, authRequest);
-        this.#auth = response;
+        auth = response;
         console.log(`User ${response.user.name} logged in`);
         return response.user;
     } catch (error) {
@@ -76,8 +72,8 @@ export class AuthService {
   /**
    * Logs out the current user.
    */
-  logOut(): void {
-    this.#auth = undefined;
+  static logOut(): void {
+    auth = undefined;
     console.log("Utilisateur déconnecté !");
   }
 }
