@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 
 import TabsPage from '../views/TabsPage.vue'
 import SignupPageVue from '@/views/SignupPage.vue';
+import NewTrip from '@/views/NewTrip.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -30,14 +31,22 @@ const routes: Array<RouteRecordRaw> = [
         path: 'tab3',
         component: () => import('@/views/Tab3Page.vue')
       },
-      {path: 'component',
-      component: () => import('@/views/Component.vue')}
     ]
   },
   {
     path: '/signup',
     name: 'Signup',
     component: SignupPageVue,
+  },
+  {
+    path : '/component',
+    name: 'Component',
+    component: () => import('@/views/Component.vue')
+  },
+  {
+    path : '/new-trip',
+    name: 'NewTrip',
+    component: NewTrip
   },
  
 ]
