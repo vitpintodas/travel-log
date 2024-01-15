@@ -2,42 +2,58 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Profil</ion-title>
+        <ion-title>Bonjour</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" padding>
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Profil</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <div class="ion-text-center">
-      <ion-item> <h1>Bonjour, {{ username }}</h1> </ion-item>
-      <form @submit.prevent="editProfile">
-        <ion-item>
-          <ion-label position="floating">Nom</ion-label>
-          <ion-input v-model="username" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="email" type="email"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Mot de passe</ion-label>
-          <ion-input v-model="password" type="password"></ion-input>
-        </ion-item>
-      </form>
-      <div class="form-group">
-        <Button @click="submitForm" :buttonText="'Modifier'"/>
-      </div>
-        </div>
+    <ion-content>
+      <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="password" v-model="currentPassword" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Mot de passe</ion-label>
+        <ion-input type="password" v-model="newPassword" required></ion-input>
+      </ion-item>
+      <ion-button @click="$router.push({ name: 'PasswordPage' })" expand="block">Modifier le mot de passe</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import Button from "@/components/Button.vue";
-import FormField from "@/components/FormField.vue";
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+<script lang="ts">
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+
+export default defineComponent({
+  name: 'EditPassword',
+  components: {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton
+  },
+  setup() {
+    const currentPassword = ref('');
+    const newPassword = ref('');
+    const confirmNewPassword = ref('');
+
+    const updatePassword = () => {
+      // Handle updating password here
+    };
+
+    return {
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+      updatePassword
+    };
+  }
+});
 </script>
+
+<style scoped>
+</style>

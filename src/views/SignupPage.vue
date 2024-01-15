@@ -1,46 +1,39 @@
 <template>
   <div class="signup-form">
-    <h1>Inscription</h1>
-    <form @submit.prevent="handleSubmit">
-      <form-field
-        id="username"
-        label="Nom d'utilisateur"
-        type="username"
-        v-model="username"
-        required
-        placeholder="user123"
-      />
-      <form-field
-        id="password"
-        label="Mot de passe"
-        type="password"
-        v-model="password"
-        required
-        placeholder="********"
-      />
-      <form-field
-        id="confirm-password"
-        label="Confirmation du mot de passe"
-        type="password"
-        v-model="confirmPassword"
-        required
-        placeholder="********"
-      />
-
-      <div class="form-group">
-        <Button @click="submitForm" :buttonText="'Inscription'" />
-      </div>
-      
-    </form>
+     <h1>Inscription</h1>
+     <form @submit.prevent="handleSubmit">
+       <ion-item>
+         <ion-label position="floating">Nom d'utilisateur</ion-label>
+         <ion-input type="text" v-model="username" required></ion-input>
+       </ion-item>
+       <ion-item>
+         <ion-label position="floating">Mot de passe</ion-label>
+         <ion-input type="password" v-model="password" required></ion-input>
+       </ion-item>
+       <ion-item>
+         <ion-label position="floating">Confirmer le mot de passe</ion-label>
+         <ion-input type="password" v-model="confirmPassword" required></ion-input>
+       </ion-item>
+ 
+       <div class="form-group">
+         <ion-button @click="submitForm" expand="block">
+           Inscription
+         </ion-button>
+       </div>
+       
+     </form>
   </div>
-</template>
-<script lang="ts">
-import FormField from "@/components/FormField.vue";
-import Button from "@/components/Button.vue";
-export default {
+ </template>
+ 
+ <script lang="ts">
+ import { IonItem, IonLabel, IonInput, IonButton } from "@ionic/vue";
+ 
+ export default {
   components: {
-    FormField,
-    Button,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton
   },
   data() {
     return {
@@ -49,29 +42,27 @@ export default {
       confirmPassword: "",
     };
   },
-
   methods: {
     handleSubmit() {
       console.log("Submitted!");
     },
     submitForm() {
-        console.log('Formulaire soumis !');
-      },
+      console.log('Formulaire soumis !');
+    },
   }
-  
-};
-</script>
-
-<style scoped>
-.signup-form {
+ };
+ </script>
+ 
+ <style scoped>
+ .signup-form {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 90vh;
   flex-direction: column;
-}
-
-.signup-form h1 {
+ }
+ 
+ .signup-form h1 {
   text-align: center;
   align-self: center;
   margin-bottom: 3rem;
@@ -79,23 +70,27 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   flex-direction: column;
-}
-
-.center-form {
+ }
+ 
+ .center-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-form {
+ }
+ 
+ form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.form-group {
+ }
+ 
+ .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-</style>
+ }
+ 
+ ion-item {
+  margin-bottom: 0.5rem;
+ }
+ </style>
