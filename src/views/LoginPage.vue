@@ -18,19 +18,27 @@
         required
         placeholder="********"
       />
-      <div class="form-group">
-        <button type="submit">Se connecter</button>
 
-        <button type="submit">S'inscrire</button>
+
+      <div class="form-group">
+        <Button @click="submitForm" :buttonText="'Connexion'" />
+     
       </div>
+      
+      <div class="form-group">
+        <Button @click="submitForm" :buttonText="'Inscrire'"/>
+      </div>
+
     </form>
   </div>
 </template>
 <script lang="ts">
+import Button from "@/components/Button.vue";
 import FormField from "@/components/FormField.vue";
 export default {
   components: {
     FormField,
+    Button
   },
   data() {
     return {
@@ -43,6 +51,9 @@ export default {
     handleSubmit() {
       console.log("Submitted!");
     },
+    submitForm() {
+        console.log('Formulaire soumis !');
+      },
   }
 };
 </script>
