@@ -26,17 +26,26 @@
         required
         placeholder="********"
       />
+
+      
       <div class="form-group">
         <button type="submit">S'inscrire</button>
       </div>
+
+      
+
+      
+      
     </form>
   </div>
 </template>
 <script lang="ts">
 import FormField from "@/components/FormField.vue";
+import Button from "@/components/Button.vue";
 export default {
   components: {
     FormField,
+    Button,
   },
   data() {
     return {
@@ -45,6 +54,7 @@ export default {
       confirmPassword: "",
     };
   },
+
   methods: {
     handleSubmit() {
       console.log("Submitted!");
