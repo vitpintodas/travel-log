@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     id: String,
@@ -28,7 +28,7 @@ export default {
       get() {
         return this.value;
       },
-      set(value) {
+      set(value: unknown) {
         this.$emit("input", value);
       },
     },

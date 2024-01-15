@@ -26,8 +26,8 @@
     </form>
   </div>
 </template>
-<script>
-import FormField from "../components/FormField.vue";
+<script lang="ts">
+import FormField from "@/components/FormField.vue";
 export default {
   components: {
     FormField,
@@ -39,6 +39,11 @@ export default {
       confirmPassword: "",
     };
   },
+  methods: {
+    handleSubmit() {
+      console.log("Submitted!");
+    },
+  }
 };
 </script>
 
