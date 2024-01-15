@@ -8,7 +8,7 @@
           <ion-label>Map</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="tab2" href="/tabs/tab2">
+        <ion-tab-button tab="trip" href="/tabs/trip">
           <ion-icon aria-hidden="true" :icon="airplaneOutline" />
           <ion-label>Voyages</ion-label>
         </ion-tab-button>
