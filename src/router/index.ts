@@ -5,6 +5,8 @@ import TabsPage from '@/views/TabsPage.vue'
 import SignupPageVue from '@/views/SignupPage.vue'
 import LoginPageVue from '@/views/LoginPage.vue'
 import NewTrip from '@/views/NewTrip.vue';
+import PasswordPage from '@/views/PasswordPage.vue';
+
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -54,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'NewTrip',
     component: NewTrip
   },
+  {
+  path : '/password',
+  name: 'PasswordPage',
+  component: PasswordPage
+},
  
 ]
 

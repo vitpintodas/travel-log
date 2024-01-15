@@ -28,7 +28,7 @@ export default {
       get() {
         return this.value;
       },
-      set(value: unknown) {
+      set(value) {
         this.$emit("input", value);
       },
     },
