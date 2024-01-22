@@ -6,7 +6,7 @@
         <ion-title>Voyages</ion-title>
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content>
       <div class="centered-container">
         <h1>Nouveau Voyage</h1>
@@ -15,17 +15,17 @@
             <ion-label position="floating">Titre</ion-label>
             <ion-input v-model="title"></ion-input>
           </ion-item>
-          
+
           <ion-item>
             <ion-label position="floating">Description</ion-label>
             <ion-textarea v-model="description"></ion-textarea>
           </ion-item>
-          
+
           <ion-item>
             <ion-label position="floating">Photo</ion-label>
             <ion-input type="file" @change="handleFileChange"></ion-input>
           </ion-item>
-          
+
           <ion-button @click="submitForm">Envoyer</ion-button>
         </div>
       </div>
@@ -56,42 +56,67 @@ export default defineComponent({
       title: '',
       description: '',
       selectedFile: null,
+      imageUrl: '',
     };
   },
   methods: {
-  async submitForm() {
-    try {
-      // Créez un objet FormData pour envoyer les données du formulaire
-      const formData = new FormData();
-      formData.append('title', this.title);
-      formData.append('description', this.description);
-      formData.append('photo', this.selectedFile);
+    async submitForm() {
+      try {
+        console.log('Début de la soumission du formulaire');
 
-      // Effectuez la requête de téléchargement de fichier avec Axios
-      const response = await axios.post('https://comem-qimg.onrender.com/api/images/', formData, {
-        headers: {
-          'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
-        },
-      });
+        // 1. Téléchargez l'image
+        const formData = new FormData();
+        formData.append('title', this.title);
+        formData.append('description', this.description);
+        formData.append('image', this.selectedFile);
 
-      // Manipulez la réponse comme nécessaire (par exemple, obtenez l'URL de l'image téléchargée)
-      const imageUrl = response.data.url;
+        const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', formData, {
+          headers: {
+            'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
-      // Émettez un événement avec les données du nouveau voyage, y compris l'URL de l'image
-      this.$emit('new-trip', {
-        title: this.title,
-        description: this.description,
-        photoUrl: imageUrl,
-      });
-    } catch (error) {
-      console.error('Erreur lors du téléchargement de l\'image', error);
-    }
+        // Récupérez l'URL de l'image téléchargée
+        this.imageUrl = imageResponse.data.url;
+        console.log('Image téléchargée avec succès:', this.imageUrl);
+
+        // 2. Créez le corps de la requête pour créer le voyage
+        const tripData = {
+          title: this.title,
+          description: this.description,
+          imageUrl: this.imageUrl,
+        };
+
+        console.log('Données du voyage:', tripData);// pour voir si on recoit les données du voyage
+
+        // 3. Effectuez la requête pour créer un nouveau voyage
+        const tripResponse = await axios.post('https://my-travel-log-cfax.onrender.com/api/trips?include=user', tripData, {
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',  // Remplacez VOTRE_TOKEN par votre vrai jeton d'authentification
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Voyage enregistré avec succès:', tripResponse.data);
+
+        // 4. Émettez un événement avec les données du nouveau voyage, y compris l'URL de l'image
+        this.$emit('new-trip', {
+          title: this.title,
+          description: this.description,
+          imageUrl: this.imageUrl,
+          tripId: tripResponse.data.id,
+        });
+
+        console.log('Fin de la soumission du formulaire');
+      } catch (error) {
+        console.error('Erreur lors de la soumission du formulaire :', error);
+      }
+    },
+    handleFileChange(event) {
+      this.selectedFile = event.target.files[0];
+    },
   },
-  handleFileChange(event) {
-    this.selectedFile = event.target.files[0];
-  },
-},
-
 });
 </script>
 
