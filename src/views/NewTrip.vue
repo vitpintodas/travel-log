@@ -37,6 +37,9 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonItem, IonLabel, IonInput, IonTextarea } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+
 
 export default defineComponent({
   components: {
@@ -59,6 +62,9 @@ export default defineComponent({
       imageUrl: '',
     };
   },
+
+  
+
   methods: {
     async submitForm() {
       try {
@@ -107,6 +113,10 @@ export default defineComponent({
           imageUrl: this.imageUrl,
           tripId: tripResponse.data.id,
         });
+
+
+        //5. Rediriger l'utilisateur sur la vue Trip.vue
+        this.$router.push('/tabs/trip');
 
         console.log('Fin de la soumission du formulaire');
       } catch (error) {

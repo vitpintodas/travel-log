@@ -16,10 +16,14 @@
 
         <!-- Si la liste de voyages n'est pas vide, afficher les voyages -->
         <div v-else>
-          <!-- Afficher la liste des voyages ici -->
-          <ul>
-            <li v-for="voyage in voyages" :key="voyage.id">{{ voyage.title }}</li>
-          </ul>
+          <!-- Afficher la liste des voyages sous forme de cartes -->
+          <ion-card v-for="voyage in voyages" :key="voyage.id" @click="handleCardClick(voyage)">
+            <ion-img :src="voyage.imageUrl" alt="Voyage Image"></ion-img>
+            <ion-card-header>
+              <ion-card-title>{{ voyage.title }}</ion-card-title>
+              <ion-card-subtitle>{{ voyage.description.slice(0, 50) }}...</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
         </div>
       </div>
 
@@ -35,17 +39,32 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFab, IonFabButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonImg, IonFab, IonFabButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import Button_Plus from '@/components/Button_Plus.vue';
-import { link } from 'ionicons/icons';
-import { ref } from 'vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 
-const voyages = ref([]); // Remplacez cela par votre liste de voyages
+const voyages = ref([]);
 const router = useRouter();
+
+onMounted(async () => {
+  // Effectuez une requête GET pour récupérer les voyages depuis l'API
+  try {
+    const response = await axios.get('https://my-travel-log-cfax.onrender.com/api/trips');
+    voyages.value = response.data; // Mettez à jour la liste des voyages avec les données de l'API
+  } catch (error) {
+    console.error('Erreur lors de la récupération des voyages :', error);
+  }
+});
 
 const handlePlusClick = () => {
   router.push('/tabs/trip/new-trip');
+};
+
+const handleCardClick = (voyage) => {
+  // Gérez la navigation ou toute autre action lorsqu'une carte est cliquée
+  console.log('Carte cliquée :', voyage);
 };
 </script>
 
