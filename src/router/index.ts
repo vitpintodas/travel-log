@@ -6,6 +6,8 @@ import SignupPageVue from '@/views/SignupPage.vue'
 import LoginPageVue from '@/views/LoginPage.vue'
 import NewTrip from '@/views/NewTrip.vue';
 import PasswordPage from '@/views/PasswordPage.vue';
+import NewPlace from '@/views/NewPlace.vue';
+import TripDetails from '@/views/TripDetails.vue';
 
 
 
@@ -65,6 +67,11 @@ const routes: Array<RouteRecordRaw> = [
   path : '/new-place',
   name: 'NewPlace',
   component: () => import('@/views/NewPlace.vue')
+},
+{
+  path : '/trip-details',
+  name: 'TripDetails',
+  component: () => import('@/views/TripDetails.vue')
 }
  
 ]
