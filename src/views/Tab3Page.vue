@@ -7,7 +7,7 @@
     </ion-header>
     <ion-content>
       <ion-item>
-        <ion-label position="floating">Username</ion-label>
+        <ion-label position="floating">Nom d'utilisateur</ion-label>
         <ion-input type="password" v-model="currentPassword" required></ion-input>
       </ion-item>
       <ion-item>
