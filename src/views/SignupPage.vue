@@ -5,8 +5,7 @@
       <form @submit.prevent="handleSubmit">
         <ion-item>
           <!-- <ion-label position="floating">Nom d'utilisateur</ion-label> -->
-          <ion-input label="Nom d'utilisateur" label-placement="floating" type="text" v-model="username"
-            required></ion-input>
+          <ion-input label="Nom d'utilisateur" label-placement="floating" type="text" v-model="name" required></ion-input>
         </ion-item>
         <ion-item>
           <!-- <ion-label position="floating">Mot de passe</ion-label> -->
@@ -18,6 +17,9 @@
           <ion-input label="Confirmer le mot de passe" label-placement="floating" type="password"
             v-model="confirmPassword" required></ion-input>
         </ion-item>
+        <span v-if="errorMessage">
+          {{ errorMessage }}
+        </span>
 
         <div class="form-group">
           <ion-button type="submit" expand="block">
@@ -33,6 +35,9 @@
 </template>
  
 <script lang="ts">
+import { UserRequest } from "@/security/user-request.model";
+import { UserService } from "@/security/user-services";
+import { AxiosError } from "axios";
 import { IonItem, IonInput, IonButton, IonPage } from "@ionic/vue";
 //  import axios from "axios";
 
@@ -47,14 +52,33 @@ export default {
   },
   data() {
     return {
-      username: "",
+      name: "",
       password: "",
       confirmPassword: "",
+      errorMessage: "",
     };
   },
   methods: {
-    handleSubmit() {
-      // const authUrl = `${API_URL}/users`;
+    async handleSubmit() {
+      const userRequest: UserRequest = {
+        name: this.name,
+        password: this.password,
+      };
+
+      if (this.password === this.confirmPassword) {
+        try {
+          await UserService.signUp(userRequest);
+          this.$router.push('Login');
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            this.errorMessage = error?.response?.data.message || "Une erreur s'est produite";
+          } else {
+            this.errorMessage = "Une erreur s'est produite";
+          }
+        }
+      } else {
+        this.errorMessage = "Les mots de passes ne correspondent pas";
+      }
     },
     submitForm() {
       this.$router.push('Login');
@@ -102,4 +126,5 @@ form {
 
 ion-item {
   margin-bottom: 0.5rem;
-}</style>
+}
+</style>

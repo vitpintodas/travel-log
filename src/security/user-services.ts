@@ -1,10 +1,7 @@
-//import { Injectable } from "@angular/core";
-import axios, { AxiosError } from 'axios';
-//import { Observable, ReplaySubject, map } from "rxjs";
+import axios from 'axios';
 import { AuthResponse } from "./auth-response.model";
-//import { HttpClient } from "@angular/common/http";
 import { User } from "./user.model";
-import { AuthRequest } from "./auth-request.model";
+import { UserRequest } from "./user-request.model";
 
 /***********************************************************/
 /*********!!! REPLACE BELOW WITH YOUR API URL !!! **********/
@@ -12,12 +9,11 @@ import { AuthRequest } from "./auth-request.model";
 const API_URL = "https://my-travel-log-cfax.onrender.com/api";
 
 let auth: AuthResponse | undefined = undefined;
-// TODO: Initialiser "auth" avec l'éventuelle valeur présente dans le store.
 
 /**
  * Authentication service for login/logout.
  */
-export class AuthService {
+export class UserService {
 
   /**
    * @returns An `Observable` that will emit a `boolean` value
@@ -54,22 +50,17 @@ export class AuthService {
    * @param authRequest An object containing the authentication request params
    * @returns An `Observable` that will emit the logged in `User` object on success.
    */
-  static async logIn(authRequest: AuthRequest): Promise<User> {
-    const authUrl = `${API_URL}/auth`;
+  static async signUp(userRequest: UserRequest): Promise<User> {
+    const authUrl = `${API_URL}/users`;
+    console.log(authUrl);
     try
     {
-        const {data: response} = await axios.post<AuthResponse>(authUrl, authRequest);
-        // TODO: stocker "response" quelque part dans un store
-        auth = response;
-        console.log(`User ${response.user.name} logged in`);
+        const {data: response} = await axios.post<AuthResponse>(authUrl, userRequest);
+        console.log("Bien ouej");
+        
         return response.user;
-    } catch (error) {
-        if (error instanceof AxiosError && error.response?.status === 401)
-        {
-            console.error("T'as une erreur sorry");
-        } else {
-            console.error("Erreur de serveur je crois:", error);
-        }
+    } catch(error) {
+        console.log("oups");
         return Promise.reject(error);
     }
   }
