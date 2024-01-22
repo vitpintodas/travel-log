@@ -12,6 +12,7 @@ import { AuthRequest } from "./auth-request.model";
 const API_URL = "https://my-travel-log-cfax.onrender.com/api";
 
 let auth: AuthResponse | undefined = undefined;
+// TODO: Initialiser "auth" avec l'éventuelle valeur présente dans le store.
 
 /**
  * Authentication service for login/logout.
@@ -40,6 +41,9 @@ export class AuthService {
    * currently is an authenticated user.
    */
   static async getToken(): Promise<string | undefined> {
+    if(auth?.token) {
+      console.log(auth.token);
+    }
     return auth?.token;
   }
 
@@ -52,9 +56,11 @@ export class AuthService {
    */
   static async logIn(authRequest: AuthRequest): Promise<User> {
     const authUrl = `${API_URL}/auth`;
+    console.log(authUrl);
     try
     {
-        const {data: response} = await axios.post(authUrl, authRequest);
+        const {data: response} = await axios.post<AuthResponse>(authUrl, authRequest);
+        // TODO: stocker "response" quelque part dans un store
         auth = response;
         console.log(`User ${response.user.name} logged in`);
         return response.user;
@@ -65,7 +71,7 @@ export class AuthService {
         } else {
             console.error("Erreur de serveur je crois:", error);
         }
-        throw error
+        return Promise.reject(error);
     }
   }
 
@@ -74,6 +80,7 @@ export class AuthService {
    */
   static logOut(): void {
     auth = undefined;
+    // TODO: Supprimer l'authentification du store
     console.log("Utilisateur déconnecté !");
   }
 }
