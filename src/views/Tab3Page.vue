@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Bonjour</ion-title>
+        <ion-title>Bonjour {{ username }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -23,7 +23,7 @@
 <script lang="ts">
 import { AuthService } from '@/security/auth-service';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
   name: 'EditPassword',
@@ -42,6 +42,18 @@ export default defineComponent({
     const currentPassword = ref('');
     const newPassword = ref('');
     const confirmNewPassword = ref('');
+    const username = ref('');
+
+    onMounted(async () => {
+      try {
+        const user = await AuthService.getUser();
+        if (user) {
+          username.value = user.name;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })
 
     const updatePassword = () => {
       // Handle updating password here
@@ -51,6 +63,7 @@ export default defineComponent({
       currentPassword,
       newPassword,
       confirmNewPassword,
+      username,
       updatePassword
     };
   },
