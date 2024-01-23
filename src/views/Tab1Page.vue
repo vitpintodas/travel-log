@@ -20,7 +20,6 @@
 
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
 import { AuthService } from '@/security/auth-service';
 import MapComponent from '@/components/MapComponent.vue';
 </script>
