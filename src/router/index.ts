@@ -1,8 +1,15 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 
-import TabsPage from '../views/TabsPage.vue';
-import SignupPageVue from '@/views/SignupPage.vue';
+import TabsPage from '@/views/TabsPage.vue'
+import SignupPageVue from '@/views/SignupPage.vue'
+import LoginPageVue from '@/views/LoginPage.vue'
+import NewTrip from '@/views/NewTrip.vue';
+import PasswordPage from '@/views/PasswordPage.vue';
+import NewPlace from '@/views/NewPlace.vue';
+import TripDetails from '@/views/TripDetails.vue';
+
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -40,11 +47,37 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Signup',
     component: SignupPageVue,
   },
+{
+  path: '/login',
+  name: 'Login',
+  component: LoginPageVue,
+},
   {
     path : '/component',
     name: 'Component',
     component: () => import('@/views/Component.vue')
   },
+  {
+    path : '/new-trip',
+    name: 'NewTrip',
+    component: NewTrip
+  },
+  {
+  path : '/password',
+  name: 'PasswordPage',
+  component: PasswordPage
+},
+{
+  path : '/new-place',
+  name: 'NewPlace',
+  component: () => import('@/views/NewPlace.vue')
+},
+{
+  path : '/trip-details',
+  name: 'TripDetails',
+  component: () => import('@/views/TripDetails.vue')
+}
+ 
 ]
 
 const router = createRouter({
