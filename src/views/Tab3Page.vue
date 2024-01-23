@@ -7,12 +7,10 @@
     </ion-header>
     <ion-content>
       <ion-item>
-        <ion-label position="floating">Username</ion-label>
-        <ion-input type="password" v-model="currentPassword" required></ion-input>
+        <ion-input label="Username" label-placement="floating" type="password" v-model="currentPassword" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Mot de passe</ion-label>
-        <ion-input type="password" v-model="newPassword" required></ion-input>
+        <ion-input label="Mot de passe" label-placement="floating" type="password" v-model="newPassword" required></ion-input>
       </ion-item>
       <ion-button @click="$router.push({ name: 'PasswordPage' })" expand="block">Modifier le mot de passe</ion-button>
       <ion-button @click="deconnected" expand="block">Déconnexion</ion-button>
