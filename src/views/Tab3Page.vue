@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { AuthService } from '@/security/auth-service';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton } from '@ionic/vue';
 import { defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
@@ -32,7 +32,6 @@ export default defineComponent({
     IonTitle,
     IonContent,
     IonItem,
-    IonLabel,
     IonInput,
     IonButton
   },
