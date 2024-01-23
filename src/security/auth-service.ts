@@ -78,7 +78,8 @@ export class AuthService {
    */
   static logOut(): void {
     auth = undefined;
-    // TODO: Supprimer l'authentification du store
+    store.clear();
+    location.reload();
     console.log("Utilisateur déconnecté !");
   }
 }

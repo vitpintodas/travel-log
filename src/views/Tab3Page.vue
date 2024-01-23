@@ -15,11 +15,13 @@
         <ion-input type="password" v-model="newPassword" required></ion-input>
       </ion-item>
       <ion-button @click="$router.push({ name: 'PasswordPage' })" expand="block">Modifier le mot de passe</ion-button>
+      <ion-button @click="deconnected" expand="block">Déconnexion</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
+import { AuthService } from '@/security/auth-service';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 
@@ -51,6 +53,11 @@ export default defineComponent({
       confirmNewPassword,
       updatePassword
     };
+  },
+  methods: {
+    deconnected() {
+      AuthService.logOut();
+    }
   }
 });
 </script>
