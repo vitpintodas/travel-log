@@ -62,6 +62,11 @@ const routes: Array<RouteRecordRaw> = [
     component: SignupPageVue,
   },
   {
+    path: "/login",
+    name: "Login",
+    component: LoginPageVue,
+  },
+  {
   path : '/password',
   name: 'PasswordPage',
   component: PasswordPage
