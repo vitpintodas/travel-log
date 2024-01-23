@@ -11,7 +11,6 @@ import { store } from '@/stores/store';
 const API_URL = "https://my-travel-log-cfax.onrender.com/api";
 
 let auth: AuthResponse | undefined = (await store.get('auth')) ?? undefined;
-console.log(auth);
 /**
  * Authentication service for login/logout.
  */
@@ -54,13 +53,11 @@ export class AuthService {
    */
   static async logIn(authRequest: AuthRequest): Promise<User> {
     const authUrl = `${API_URL}/auth`;
-    console.log(auth);
     try
     {
         const {data: response} = await axios.post<AuthResponse>(authUrl, authRequest);
         auth = response;
         await store.set('auth', auth);
-        console.log(`User ${response.user.name} logged in`);
         return response.user;
     } catch (error) {
         if (error instanceof AxiosError && error.response?.status === 401)

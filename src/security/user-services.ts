@@ -22,15 +22,11 @@ export class UserService {
    */
   static async signUp(userRequest: UserRequest): Promise<User> {
     const authUrl = `${API_URL}/users`;
-    console.log(authUrl);
     try
     {
         const {data: response} = await axios.post<AuthResponse>(authUrl, userRequest);
-        console.log("Bien ouej");
-        
         return response.user;
     } catch(error) {
-        console.log("oups");
         return Promise.reject(error);
     }
   }
