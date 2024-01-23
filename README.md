@@ -1,10 +1,10 @@
 # User guide - TravelLog
 
-Bienvenue sur l’API TravelLog, ce guide vous explique comment 
+📱Bienvenue sur l’API TravelLog, ce guide vous explique comment voyager à travers notre application. 📱
 ---
 :construction: **Étape 0 - Installation** :construction:
 
-- Dans le terminal à la racine du dossier
+- Dans le terminal, à la racine du dossier
 
 ```jsx
 npm install
@@ -69,7 +69,7 @@ npm run dev
 
 - Sous l’onglet profil 👤
 - Modifier
-- Remplir les champs d’informations
+- Remplir les champs d’information
 - Mettre à jour le mot de passe
 
 **Étape 11 - Déconnecter l’utilisateur** 
