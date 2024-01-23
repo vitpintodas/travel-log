@@ -77,7 +77,7 @@ export default {
           latitude: 0,
           longitude: 0,
         },
-        photo: null,
+        photo: null as File | null,
         pictureUrl: '', // Utiliser pictureUrl au lieu de imageUrl
       },
       map: undefined,
@@ -134,10 +134,20 @@ export default {
         formData.append('name', this.place.name);
         formData.append('description', this.place.description);
         formData.append('location', JSON.stringify(this.place.location));
+        formData.append('tripHref', '...'); // ou
+        formData.append('tripId', '...');
+
+
+         // Convertir les coordonnées en GeoJSON
+        const geoJsonLocation = {
+          type: 'Point',
+          coordinates: [this.place.location.longitude, this.place.location.latitude],
+         };
+        formData.append('location', JSON.stringify(geoJsonLocation));
 
         // Téléchargez l'image avec le champ pictureUrl
         const imageFormData = new FormData();
-        imageFormData.append('pictureUrl', this.place.photo);
+        imageFormData.append('image', this.place.photo as File);
 
         console.log('Before image upload');
         const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', imageFormData, {
@@ -147,7 +157,7 @@ export default {
           },
         });
 
-        console.log('After image upload');
+        console.log('After image upload', imageResponse);
 
         // Utilisez pictureUrl au lieu de imageUrl
         this.place.pictureUrl = imageResponse.data.url;
@@ -158,7 +168,7 @@ export default {
         const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1N.eyJzdWIiOiIxMjM0NTY3ODkw.SflKxwRJSMeKKF',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
           },
         });
         console.log('After place creation');
@@ -180,8 +190,9 @@ export default {
         }
       }
     },
-    handleFileChange(event) {
-      this.place.photo = event.target.files[0];
+    handleFileChange(event:Event) {
+      const target = event.target as HTMLInputElement;
+      this.place.photo = target.files?.[0] ?? null;
     },
   },
 
