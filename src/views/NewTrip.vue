@@ -1,4 +1,3 @@
-<!-- NewTrip.vue -->
 <template>
   <ion-page>
     <ion-header>
@@ -26,6 +25,9 @@
             <ion-input type="file" @change="handleFileChange"></ion-input>
           </ion-item>
 
+          <!-- Affichage de l'avertissement en rouge -->
+          <p v-if="formError" class="form-error">{{ formError }}</p>
+
           <ion-button @click="submitForm">Envoyer</ion-button>
         </div>
       </div>
@@ -38,8 +40,6 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIte
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-
-
 
 export default defineComponent({
   components: {
@@ -60,15 +60,21 @@ export default defineComponent({
       description: '',
       selectedFile: null,
       imageUrl: '',
+      formError: '', // Nouvelle donnée pour stocker l'erreur du formulaire
     };
   },
-
-  
 
   methods: {
     async submitForm() {
       try {
-        console.log('Début de la soumission du formulaire');
+        // Réinitialiser l'erreur du formulaire à chaque soumission
+        this.formError = '';
+
+        // Vérifier si les champs obligatoires sont remplis
+        if (!this.title || !this.description || !this.selectedFile) {
+          this.formError = "Merci de remplir tous les champs"; // Avertissement si un champ est vide
+          return;
+        }
 
         // 1. Téléchargez l'image
         const formData = new FormData();
@@ -94,12 +100,12 @@ export default defineComponent({
           imageUrl: this.imageUrl,
         };
 
-        console.log('Données du voyage:', tripData);// pour voir si on recoit les données du voyage
+        console.log('Données du voyage:', tripData);
 
         // 3. Effectuez la requête pour créer un nouveau voyage
         const tripResponse = await axios.post('https://my-travel-log-cfax.onrender.com/api/trips?include=user', tripData, {
           headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',  // Remplacez VOTRE_TOKEN par votre vrai jeton d'authentification
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
             'Content-Type': 'application/json',
           },
         });
@@ -114,8 +120,7 @@ export default defineComponent({
           tripId: tripResponse.data.id,
         });
 
-
-        //5. Rediriger l'utilisateur sur la vue Trip.vue
+        // 5. Rediriger l'utilisateur sur la vue Trip.vue
         this.$router.push('/tabs/trip');
 
         console.log('Fin de la soumission du formulaire');
@@ -144,5 +149,11 @@ export default defineComponent({
   padding: 20px;
   box-sizing: border-box;
   margin-top: 20px;
+}
+
+.form-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
 }
 </style>

@@ -6,15 +6,17 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="content-with-margins">
       <div class="centered-content">
         <p v-if="voyages.length === 0">
           Créez votre premier voyage pour commencer à enregistrer des lieux
         </p>
 
         <div v-else>
-          <ion-card v-for="voyage in voyages" :key="voyage.id">
-            <ion-img :src="voyage.imageUrl" alt="Voyage Image"></ion-img>
+          <ion-card v-for="voyage in voyages" :key="voyage.id" class="voyage-card">
+            <!-- Ajout de l'image de montagne dans la partie haute de la carte -->
+            <ion-img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Silhouette of mountains"></ion-img>
+
             <ion-card-header>
               <ion-card-title>{{ voyage.title }}</ion-card-title>
               <ion-card-subtitle>{{ voyage.description.slice(0, 50) }}...</ion-card-subtitle>
@@ -35,6 +37,9 @@
                 <ion-input v-model="editedVoyage.description"></ion-input>
               </ion-item>
 
+                <!-- Affichage du message d'erreur si les champs sont vides -->
+                <p v-if="isFieldsEmpty()" class="error-message">Merci de renseigner les informations manquantes.</p>
+
               <ion-button @click.stop="saveChanges(voyage)">Enregistrer</ion-button>
             </ion-card-content>
           </ion-card>
@@ -51,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonImg, IonFab, IonFabButton, IonButton, IonItem, IonLabel, IonInput } from '@ionic/vue';
+import { IonPage, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonImg, IonButton, IonItem, IonLabel, IonInput } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import Button_Plus from '@/components/Button_Plus.vue';
 import axios from 'axios';
@@ -81,13 +86,11 @@ const handlePlusClick = () => {
   router.push('/tabs/trip/new-trip');
 };
 
-//fonction appelée quand on clique sur le bouton modifier d'une carte
 const editCard = (voyage) => {
   editingMode.value = true;
   editedVoyage.value = { ...voyage };
 };
 
-// Nouvelle fonction pour le bouton "En savoir plus"
 const enSavoirPlus = (voyage) => {
   console.log('Bouton "En savoir plus" cliqué pour le voyage :', voyage);
   // Ajoutez ici le code que vous souhaitez exécuter lorsque le bouton "En savoir plus" est cliqué
@@ -118,14 +121,33 @@ const saveChanges = async (originalVoyage) => {
     console.log('Réponse détaillée de l\'API :', error.response?.data);
   }
 };
+
+const isFieldsEmpty = () => {
+  return editedVoyage.value.title === '' || editedVoyage.value.description === '';
+};
 </script>
 
 <style scoped>
+
+.error-message {
+  color: red;
+}
+
 .centered-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+}
+
+.content-with-margins {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.voyage-card {
+  max-width: 400px;
+
+  /* Ajoutez ici des styles spécifiques pour la carte du voyage si nécessaire */
 }
 </style>
