@@ -15,7 +15,8 @@
         <div v-else>
           <ion-card v-for="voyage in voyages" :key="voyage.id" class="voyage-card">
             <!-- Ajout de l'image de montagne dans la partie haute de la carte -->
-            <ion-img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Silhouette of mountains"></ion-img>
+            <ion-img src="https://ionicframework.com/docs/img/demos/card-media.png"
+              alt="Silhouette of mountains"></ion-img>
 
             <ion-card-header>
               <ion-card-title>{{ voyage.title }}</ion-card-title>
@@ -24,7 +25,7 @@
 
             <ion-card-content v-if="!editingMode || (editingMode && editedVoyage.id !== voyage.id)">
               <ion-button fill="clear" @click.stop="editCard(voyage)">Modifier</ion-button>
-              <ion-button fill="clear" @click.stop="enSavoirPlus(voyage)">En savoir plus</ion-button>
+              <ion-button fill="clear" @click.stop="enSavoirPlus(voyage)">Voir Détails</ion-button>
             </ion-card-content>
 
             <ion-card-content v-if="editingMode && editedVoyage.id === voyage.id">
@@ -37,8 +38,8 @@
                 <ion-input v-model="editedVoyage.description"></ion-input>
               </ion-item>
 
-                <!-- Affichage du message d'erreur si les champs sont vides -->
-                <p v-if="isFieldsEmpty()" class="error-message">Merci de renseigner les informations manquantes.</p>
+              <!-- Affichage du message d'erreur si les champs sont vides -->
+              <p v-if="isFieldsEmpty()" class="error-message">Merci de renseigner les informations manquantes.</p>
 
               <ion-button @click.stop="saveChanges(voyage)">Enregistrer</ion-button>
             </ion-card-content>
@@ -92,8 +93,10 @@ const editCard = (voyage) => {
 };
 
 const enSavoirPlus = (voyage) => {
-  console.log('Bouton "En savoir plus" cliqué pour le voyage :', voyage);
-  // Ajoutez ici le code que vous souhaitez exécuter lorsque le bouton "En savoir plus" est cliqué
+  console.log('Bouton "Voir détails" cliqué pour le voyage :', voyage);
+  router.push({ name: 'TripDetails', params: { id: voyage.id, tripId: voyage.tripId } });
+
+  // Ajoutez ici le code que vous souhaitez exécuter lorsque le bouton "Voir détail" est cliqué
 };
 
 const saveChanges = async (originalVoyage) => {
@@ -128,7 +131,6 @@ const isFieldsEmpty = () => {
 </script>
 
 <style scoped>
-
 .error-message {
   color: red;
 }

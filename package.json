@@ -35,7 +35,8 @@
     "rxjs": "^7.8.1",
     "vee-validate": "^4.12.3",
     "vue": "^3.3.0",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "vue3-leaflet": "^1.0.48"
   },
   "devDependencies": {
     "@capacitor/cli": "5.6.0",

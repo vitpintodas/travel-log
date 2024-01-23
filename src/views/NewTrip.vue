@@ -20,10 +20,7 @@
             <ion-textarea v-model="description"></ion-textarea>
           </ion-item>
 
-          <ion-item>
-            <ion-label position="floating">Photo</ion-label>
-            <ion-input type="file" @change="handleFileChange"></ion-input>
-          </ion-item>
+          
 
           <!-- Affichage de l'avertissement en rouge -->
           <p v-if="formError" class="form-error">{{ formError }}</p>
@@ -59,7 +56,7 @@ export default defineComponent({
       title: '',
       description: '',
       selectedFile: null,
-      imageUrl: '',
+      //imageUrl: '',
       formError: '', // Nouvelle donnée pour stocker l'erreur du formulaire
     };
   },
@@ -71,7 +68,7 @@ export default defineComponent({
         this.formError = '';
 
         // Vérifier si les champs obligatoires sont remplis
-        if (!this.title || !this.description || !this.selectedFile) {
+        if (!this.title || !this.description) {
           this.formError = "Merci de remplir tous les champs"; // Avertissement si un champ est vide
           return;
         }
@@ -80,7 +77,7 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('title', this.title);
         formData.append('description', this.description);
-        formData.append('image', this.selectedFile);
+        /*formData.append('image', this.selectedFile);
 
         const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', formData, {
           headers: {
@@ -91,13 +88,13 @@ export default defineComponent({
 
         // Récupérez l'URL de l'image téléchargée
         this.imageUrl = imageResponse.data.url;
-        console.log('Image téléchargée avec succès:', this.imageUrl);
+        console.log('Image téléchargée avec succès:', this.imageUrl);*/
 
         // 2. Créez le corps de la requête pour créer le voyage
         const tripData = {
           title: this.title,
           description: this.description,
-          imageUrl: this.imageUrl,
+          //imageUrl: this.imageUrl,
         };
 
         console.log('Données du voyage:', tripData);
