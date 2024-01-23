@@ -25,7 +25,6 @@ npm run dev
 - Créer un voyage ➕
 - Remplir les champs d’information
 - Soumettre
-- (Recharger la page pour trouver le voyage crée)
 
 :pencil2: **Étape 4 - Modification d’un voyage :** :pencil2:
 
