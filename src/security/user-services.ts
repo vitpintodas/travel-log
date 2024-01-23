@@ -8,40 +8,10 @@ import { UserRequest } from "./user-request.model";
 /***********************************************************/
 const API_URL = "https://my-travel-log-cfax.onrender.com/api";
 
-let auth: AuthResponse | undefined = undefined;
-
 /**
  * Authentication service for login/logout.
  */
 export class UserService {
-
-  /**
-   * @returns An `Observable` that will emit a `boolean` value
-   * indicating whether the current user is authenticated.
-   * This `Observable` will never complete and must be unsubscribed for when not needed.
-   */
-  static async isAuthenticated(): Promise<boolean> {
-    return !!auth;
-  }
-
-  /**
-   * @returns An `Observable` that will emit the currently authenticated `User` object only if there
-   * currently is an authenticated user.
-   */
-  static async getUser(): Promise<User | undefined> {
-    return auth?.user;
-  }
-
-  /**
-   * @returns An `Observable` that will emit the currently authenticated user's `token`, only if there
-   * currently is an authenticated user.
-   */
-  static async getToken(): Promise<string | undefined> {
-    if(auth?.token) {
-      console.log(auth.token);
-    }
-    return auth?.token;
-  }
 
   /**
    * Sends an authentication request to the backend API in order to log in a user with the
@@ -63,14 +33,5 @@ export class UserService {
         console.log("oups");
         return Promise.reject(error);
     }
-  }
-
-  /**
-   * Logs out the current user.
-   */
-  static logOut(): void {
-    auth = undefined;
-    // TODO: Supprimer l'authentification du store
-    console.log("Utilisateur déconnecté !");
   }
 }

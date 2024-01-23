@@ -1,19 +1,17 @@
 //import { Injectable } from "@angular/core";
 import axios, { AxiosError } from 'axios';
-//import { Observable, ReplaySubject, map } from "rxjs";
 import { AuthResponse } from "./auth-response.model";
-//import { HttpClient } from "@angular/common/http";
 import { User } from "./user.model";
 import { AuthRequest } from "./auth-request.model";
+import { store } from '@/stores/store';
 
 /***********************************************************/
 /*********!!! REPLACE BELOW WITH YOUR API URL !!! **********/
 /***********************************************************/
 const API_URL = "https://my-travel-log-cfax.onrender.com/api";
 
-let auth: AuthResponse | undefined = undefined;
-// TODO: Initialiser "auth" avec l'éventuelle valeur présente dans le store.
-
+let auth: AuthResponse | undefined = (await store.get('auth')) ?? undefined;
+console.log(auth);
 /**
  * Authentication service for login/logout.
  */
@@ -56,11 +54,12 @@ export class AuthService {
    */
   static async logIn(authRequest: AuthRequest): Promise<User> {
     const authUrl = `${API_URL}/auth`;
+    console.log(auth);
     try
     {
         const {data: response} = await axios.post<AuthResponse>(authUrl, authRequest);
-        // TODO: stocker "response" quelque part dans un store
         auth = response;
+        await store.set('auth', auth);
         console.log(`User ${response.user.name} logged in`);
         return response.user;
     } catch (error) {
