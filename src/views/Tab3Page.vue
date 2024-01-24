@@ -7,10 +7,10 @@
     </ion-header>
     <ion-content>
       <ion-item>
-        <ion-input label="Username" label-placement="floating" type="password" v-model="currentPassword" required></ion-input>
+        <ion-label>Nom d'utilisateur : {{ username }}</ion-label>
       </ion-item>
       <ion-item>
-        <ion-input label="Mot de passe" label-placement="floating" type="password" v-model="newPassword" required></ion-input>
+        <ion-label>Mot de passe : ********</ion-label>
       </ion-item>
       <ion-button @click="$router.push({ name: 'PasswordPage' })" expand="block">Modifier le mot de passe</ion-button>
       <ion-button @click="deconnected" expand="block">Déconnexion</ion-button>
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { AuthService } from '@/security/auth-service';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonButton } from '@ionic/vue';
 import { defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
@@ -32,13 +32,10 @@ export default defineComponent({
     IonTitle,
     IonContent,
     IonItem,
-    IonInput,
+    IonLabel,
     IonButton
   },
   setup() {
-    const currentPassword = ref('');
-    const newPassword = ref('');
-    const confirmNewPassword = ref('');
     const username = ref('');
 
     onMounted(async () => {
@@ -50,23 +47,19 @@ export default defineComponent({
       } catch (error) {
         console.error(error);
       }
-    })
-
-    const updatePassword = () => {
-      // Handle updating password here
-    };
+    });
 
     return {
-      currentPassword,
-      newPassword,
-      confirmNewPassword,
-      username,
-      updatePassword
+      username
     };
   },
   methods: {
     deconnected() {
       AuthService.logOut();
+    },
+    redirectToPasswordChange() {
+      // Logic to redirect to the password change page
+      this.$router.push({ name: 'PasswordChange' });
     }
   }
 });

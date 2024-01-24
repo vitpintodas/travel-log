@@ -77,6 +77,8 @@ const editedVoyage = ref({
 
 const editingMode = ref(false);
 
+
+
 onMounted(async () => {
   try {
     const userID = await AuthService.getUser();

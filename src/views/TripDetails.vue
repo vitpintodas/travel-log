@@ -39,6 +39,7 @@
         </ion-card-content>
       </ion-card>
       <ion-button @click="redirectToNewPlace" expand="block">Ajouter un lieu</ion-button>
+      <ion-button @click="$router.push('/tabs/trip')" expand="block">Retour</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -81,18 +82,21 @@ export default defineComponent({
     toggleSortSection() {
       this.sortSectionOpen = !this.sortSectionOpen;
     },
-    
+   
     redirectToNewPlace() {
       const tripId = this.$route.params.id;
       this.$router.push({ name: 'NewPlace', params: { tripId } });
     },
+    redirectToTrip() {
+      this.$router.push({ name: '/tabs/trip' }).then(() => {
+        window.location.reload();
+      });
+    }
   },
+
   computed: {
     sortedPlaces() {
-      // Mettez en œuvre la logique de tri ici selon la valeur de this.sortOption
-      // Vous pouvez utiliser une fonction comme lodash sortBy pour trier votre tableau
-      // Exemple : import { sortBy } from 'lodash';
-      // return sortBy(this.trip.places, 'name');
+    
       return this.trip.places;
     },
   },
