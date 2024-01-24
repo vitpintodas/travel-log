@@ -39,7 +39,6 @@
         </ion-card-content>
       </ion-card>
       <ion-button @click="redirectToNewPlace" expand="block">Ajouter un lieu</ion-button>
-      <ion-button @click="deleteTrip" expand="block" color="danger">Supprimer le voyage</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -82,19 +81,7 @@ export default defineComponent({
     toggleSortSection() {
       this.sortSectionOpen = !this.sortSectionOpen;
     },
-    deleteTrip() {
-      const tripId = this.$route.params.id;
-
-      axios.delete(`https://my-travel-log-cfax.onrender.com/api/trips/${tripId}`)
-        .then(response => {
-          console.log('Réponse de l\'API après la suppression du voyage :', response.data);
-          // Redirigez l'utilisateur vers une autre page après la suppression du voyage
-          this.$router.push({ name: 'NomDeLaPage' });
-        })
-        .catch(error => {
-          console.error('Erreur lors de la suppression du voyage :', error);
-        });
-    },
+    
     redirectToNewPlace() {
       const tripId = this.$route.params.id;
       this.$router.push({ name: 'NewPlace', params: { tripId } });
