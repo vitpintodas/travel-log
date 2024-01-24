@@ -77,7 +77,26 @@ export default {
       });
     },
 
-    async fetchVoyages() {
+    //L'idéal aurait été de faire ceci : vérifier quel user est connecté et ainsi afficher seulement les voyages que l'user a créer en étant connecté. Mais nous avons rencontré des soucis avec la base de données en tentant cette implémentation :(     
+    
+/*async fetchVoyages() {
+  try {
+    // Replace 'userId' with the actual property where the user ID is stored
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.error("User is not logged in.");
+      return;
+    }
+    const response = await axios.get(
+      `https://my-travel-log-cfax.onrender.com/api/trips?user=${userId}`
+    );
+    this.trips = response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des voyages :", error);
+  }
+},*/
+
+  async fetchVoyages() {
       try {
         const response = await axios.get(
           "https://my-travel-log-cfax.onrender.com/api/trips"
@@ -87,6 +106,7 @@ export default {
         console.error("Erreur lors de la récupération des voyages :", error);
       }
     },
+
     filterPinsByVoyage() {
       if (!this.selectedVoyage) return;
       this.clearMarkers();
