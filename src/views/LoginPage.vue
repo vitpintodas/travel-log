@@ -62,6 +62,7 @@ export default {
         password: this.password,
       };
       console.log('Formulaire soumis !', this.username, this.password);
+     
       try {
         await AuthService.logIn(authRequest);
         this.$router.push('/tabs/trip');

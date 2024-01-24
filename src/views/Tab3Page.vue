@@ -62,6 +62,7 @@ export default defineComponent({
       this.$router.push({ name: 'PasswordChange' });
     }
   }
+  
 });
 </script>
 

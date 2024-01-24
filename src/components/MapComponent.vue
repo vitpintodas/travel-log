@@ -19,6 +19,7 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import { Trip } from "../models/trip";
 import { Place } from "../models/place";
+import { AuthService } from '@/security/auth-service';
 
 type Data = {
   map?: L.Map;
@@ -77,7 +78,7 @@ export default {
       });
     },
 
-    async fetchVoyages() {
+    /*async fetchVoyages() {
       try {
         const response = await axios.get(
           "https://my-travel-log-cfax.onrender.com/api/trips"
@@ -86,7 +87,21 @@ export default {
       } catch (error) {
         console.error("Erreur lors de la récupération des voyages :", error);
       }
+    },*/
+  
+    async fetchVoyages() {
+      try {
+        const userID = await AuthService.getUser();  // Obtenir l'ID de l'utilisateur
+        if (userID) {
+          const userId = userID.id;
+          const response = await axios.get(`https://my-travel-log-cfax.onrender.com/api/trips?user=${userId}`);
+          this.trips = response.data;
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des voyages :", error);
+      }
     },
+  
     filterPinsByVoyage() {
       if (!this.selectedVoyage) return;
       this.clearMarkers();

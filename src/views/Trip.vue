@@ -82,6 +82,9 @@ const editingMode = ref(false);
 onMounted(async () => {
   try {
     const userID = await AuthService.getUser();
+    const token = await AuthService.getToken();
+
+    console.log
     if (userID) {
       userId.value = userID.id;
       const response = await axios.get(`https://my-travel-log-cfax.onrender.com/api/trips?user=${userId.value}`);
