@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
   component: PasswordPage
 },
 {
-  path : '/new-place',
+  path : '/new-place/:id',
   name: 'NewPlace',
   component: () => import('@/views/NewPlace.vue')
 },

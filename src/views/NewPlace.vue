@@ -9,6 +9,7 @@
       <ion-list>
         <ion-item>
           <ion-input label="Lieu" v-model="place.name"></ion-input>
+          <ion-input label="Description" v-model="place.description"></ion-input>
         </ion-item>
 
         <ion-item style="height: 400px; align-items: center;">
@@ -26,8 +27,6 @@
           <ion-input type="file" @change="handleFileChange"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-textarea style="font-weight: bold;" position="stacked">Description</ion-textarea>
-          <ion-textarea style="max-height: 20px;  width: 50%;" v-model="place.description"></ion-textarea>
         </ion-item>
       </ion-list>
       <ion-button @click="submitForm" expand="block">Envoyer</ion-button>
@@ -52,6 +51,7 @@ import {
   IonTextarea,
   IonButton,
 } from '@ionic/vue';
+import { ISODateString } from '@capacitor/core';
 
 export default {
   name: 'NewPlace',
@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       place: {
+        tripId: '', // Ajoutez cette ligne pour inclure le tripId
         name: '',
         description: '',
         location: {
@@ -78,7 +79,7 @@ export default {
           longitude: 0,
         },
         photo: null as File | null,
-        pictureUrl: '', // Utiliser pictureUrl au lieu de imageUrl
+        pictureUrl: '',
       },
       map: undefined,
       userLocation: undefined,
@@ -128,69 +129,73 @@ export default {
     },
     async submitForm() {
       try {
-        console.log('Starting submitForm');
+        const tripId = this.$route.params.id;
+
+        console.log('tripId:', tripId);
+        console.log('place:', this.place);
+        console.log('place.name:', this.place.name);
+        console.log('place.description:', this.place.description);
+        console.log('place.location:', this.place.location);
+        
 
         const formData = new FormData();
         formData.append('name', this.place.name);
         formData.append('description', this.place.description);
-        formData.append('location', JSON.stringify(this.place.location));
-        formData.append('tripHref', '...'); // ou
-        formData.append('tripId', '...');
+        formData.append('tripId', this.$route.params.id.toString());
+        formData.append('location.coordinates', this.place.location.longitude + ',' + this.place.location.latitude);
+        formData.append('location.type', 'Point');
 
+        console.log('Form Data before image upload:', formData);
 
-         // Convertir les coordonnées en GeoJSON
         const geoJsonLocation = {
           type: 'Point',
           coordinates: [this.place.location.longitude, this.place.location.latitude],
-         };
+        };
         formData.append('location', JSON.stringify(geoJsonLocation));
+        console.log('geoJsonLocation:', geoJsonLocation);
 
-        // Téléchargez l'image avec le champ pictureUrl
         const imageFormData = new FormData();
         imageFormData.append('image', this.place.photo as File);
 
-        console.log('Before image upload');
+        console.log('Form Data:', formData);
+
         const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', imageFormData, {
           headers: {
             'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log('Image uploaded successfully:', imageResponse.data);
 
-        console.log('After image upload', imageResponse);
-
-        // Utilisez pictureUrl au lieu de imageUrl
         this.place.pictureUrl = imageResponse.data.url;
         formData.append('pictureUrl', this.place.pictureUrl);
-        console.log('Image téléchargée avec succès:', this.place.pictureUrl);
 
-        console.log('Before place creation');
-        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', formData, {
+        console.log('Form Data after image upload:', formData);
+
+        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places?include=user', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
           },
         });
-        console.log('After place creation');
 
-        console.log('Response:', response);
+        console.log('Response after submitting form:', response);
 
         if (response.status === 201) {
-          console.log('Place added successfully!');
+          console.log('Place ajoutée avec succès !');
+          this.$router.push({ name: 'TripDetails', params: { id: tripId } });
         } else {
-          console.error('Error adding place.');
+          console.error('Erreur lors de l\'ajout du lieu :', response.status);
         }
-
-        console.log('End of submitForm');
       } catch (error) {
-        console.error('Error in submitForm:', error);
+        console.error('Erreur lors de la requête:', error);
 
         if (error.response) {
-          console.error('Detailed server response:', error.response.data);
+          console.error('Réponse détaillée du serveur:', error.response.data);
         }
       }
     },
-    handleFileChange(event:Event) {
+    handleFileChange(event: Event) {
       const target = event.target as HTMLInputElement;
       this.place.photo = target.files?.[0] ?? null;
     },
@@ -204,28 +209,28 @@ export default {
 </script>
 
 <style scoped>
-#map-container {
-  height: 50%;
-  width: 100%;
-  position: fixed;
-  top: 50;
-  left: 100;
-}
+  #map-container {
+    height: 50%;
+    width: 100%;
+    position: fixed;
+    top: 50;
+    left: 100;
+  }
 
-#map {
-  bottom: -40px;
-  height: 50%;
-  width: 100%;
-}
+  #map {
+    bottom: -40px;
+    height: 50%;
+    width: 100%;
+  }
 
-input[type="text"] {
-  border: 1px solid #ccc;
-  top: 15px;
-  width: 100%;
-  height: 100%;
-  padding: 5px;
-  border-radius: 4px;
-  padding: 20px;
-  width: 400px;
-}
+  input[type="text"] {
+    border: 1px solid #ccc;
+    top: 15px;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    padding: 20px;
+    width: 400px;
+  }
 </style>
