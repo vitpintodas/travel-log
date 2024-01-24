@@ -26,6 +26,7 @@
             <ion-card-content v-if="!editingMode || (editingMode && editedVoyage.id !== voyage.id)">
               <ion-button fill="clear" @click.stop="editCard(voyage)">Modifier</ion-button>
               <ion-button fill="clear" @click.stop="enSavoirPlus(voyage)">Voir Détails</ion-button>
+              <ion-button @click="confirmDelete(voyage)" expand="full" color="danger">Supprimer</ion-button>
             </ion-card-content>
 
             <ion-card-content v-if="editingMode && editedVoyage.id === voyage.id">
@@ -57,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonImg, IonButton, IonItem, IonLabel, IonInput } from '@ionic/vue';
+import { IonPage, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonImg, IonButton, IonItem, IonLabel, IonInput, alertController } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import Button_Plus from '@/components/Button_Plus.vue';
 import axios from 'axios';
@@ -134,6 +135,57 @@ const saveChanges = async (originalVoyage) => {
 const isFieldsEmpty = () => {
   return editedVoyage.value.title === '' || editedVoyage.value.description === '';
 };
+
+const confirmDelete = async (voyage) => {
+  const alert = await alertController.create({
+    header: 'Confirmation',
+    message: `Voulez-vous vraiment supprimer le voyage "${voyage.title}" ? Cette action est irréversible.`,
+    buttons: [
+      {
+        text: 'Annuler',
+        role: 'cancel',
+        cssClass: 'secondary',
+      },
+      {
+        text: 'Confirmer',
+        handler: async () => {
+          try {
+            const response = await axios.delete(`https://my-travel-log-cfax.onrender.com/api/trips/${voyage.id}`, {
+              headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
+              },
+            });
+
+            console.log('Réponse de la requête Axios (suppression) :', response.data);
+
+            const updatedResponse = await axios.get('https://my-travel-log-cfax.onrender.com/api/trips');
+            voyages.value = updatedResponse.data;
+
+            console.log('Voyage supprimé avec succès.');
+          } catch (error) {
+            if (error.response) {
+              if (error.response.status === 404) {
+                console.error('Erreur lors de la suppression du voyage :', 'Aucun voyage trouvé avec l\'ID spécifié.');
+              } else if (error.response.status === 401) {
+                console.error('Erreur lors de la suppression du voyage :', 'Non autorisé. Veuillez vous authentifier.');
+              } else if (error.response.status === 403) {
+                console.error('Erreur lors de la suppression du voyage :', 'Action interdite. Vous n\'avez pas les autorisations nécessaires.');
+              } else {
+                console.error('Erreur lors de la suppression du voyage :', error.response.data);
+              }
+            } else {
+              console.error('Erreur lors de la suppression du voyage :', error.message);
+            }
+          }
+        },
+      },
+    ],
+  });
+
+  await alert.present();
+};
+
+
 </script>
 
 <style scoped>
