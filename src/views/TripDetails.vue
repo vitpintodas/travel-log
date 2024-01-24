@@ -29,7 +29,7 @@
             </ion-item>
           </ion-list>
           <ion-list>
-            <ion-item v-if="trip.places.length === 0">
+            <ion-item v-if="!trip.places || trip.places.length === 0">
               <ion-label>Aucun lieu pour le moment</ion-label>
             </ion-item>
             <ion-item v-for="place in sortedPlaces" :key="place.id">

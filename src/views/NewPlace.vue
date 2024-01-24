@@ -51,7 +51,6 @@ import {
   IonTextarea,
   IonButton,
 } from '@ionic/vue';
-import { ISODateString } from '@capacitor/core';
 
 export default {
   name: 'NewPlace',
@@ -137,44 +136,24 @@ export default {
         console.log('place.description:', this.place.description);
         console.log('place.location:', this.place.location);
 
-        const formData = new FormData();
-        formData.append('name', this.place.name);
-        formData.append('description', this.place.description);
-        formData.append('tripId', this.$route.params.id.toString());
-        //formData.append('location.coordinates', this.place.location.longitude + ',' + this.place.location.latitude);
-        //formData.append('location.type', 'Point');
-
-        console.log('Form Data before image upload:', formData);
-
-        const geoJsonLocation = {
-          type: 'Point',
-          coordinates: [this.place.location.longitude, this.place.location.latitude],
-        };
-        formData.append('location', JSON.stringify(geoJsonLocation));
-        console.log('geoJsonLocation:', geoJsonLocation);
-
-        const imageFormData = new FormData();
-        imageFormData.append('image', this.place.photo as File);
-
-        console.log('Form Data:', formData);
-
-        const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', imageFormData, {
-          headers: {
-            'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
-            'Content-Type': 'multipart/form-data',
+        const requestBody = {
+          name: this.place.name,
+          description: this.place.description,
+          tripId: tripId, // Utilisez la variable tripId
+          location: {
+            type: 'Point',
+            coordinates: [this.place.location.longitude, this.place.location.latitude],
           },
-        });
-        console.log('Image uploaded successfully:', imageResponse.data);
+          //pictureUrl: '', // Vous pouvez ajouter une URL de l'image si nécessaire
+        };
 
-        this.place.pictureUrl = imageResponse.data.url;
-        formData.append('pictureUrl', this.place.pictureUrl);
+        console.log('Request Body:', requestBody);
 
-        console.log('Form Data after image upload:', formData);
-
-        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', formData, {
+        // Envoyez la requête avec Axios
+        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', requestBody, {
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
+            'Content-Type': 'application/json',
           },
         });
 
