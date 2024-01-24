@@ -136,14 +136,13 @@ export default {
         console.log('place.name:', this.place.name);
         console.log('place.description:', this.place.description);
         console.log('place.location:', this.place.location);
-        
 
         const formData = new FormData();
         formData.append('name', this.place.name);
         formData.append('description', this.place.description);
         formData.append('tripId', this.$route.params.id.toString());
-        formData.append('location.coordinates', this.place.location.longitude + ',' + this.place.location.latitude);
-        formData.append('location.type', 'Point');
+        //formData.append('location.coordinates', this.place.location.longitude + ',' + this.place.location.latitude);
+        //formData.append('location.type', 'Point');
 
         console.log('Form Data before image upload:', formData);
 
@@ -172,9 +171,9 @@ export default {
 
         console.log('Form Data after image upload:', formData);
 
-        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places?include=user', formData, {
+        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
           },
         });
