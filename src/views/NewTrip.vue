@@ -76,6 +76,15 @@ export default defineComponent({
             return;
           }
 
+          if (this.description.length < 5) {
+        this.formError = "La description est trop courte. Elle doit contenir au moins 10 caractères.";
+        return;
+    }
+
+    if (this.title.length < 3) {
+        this.formError = "Le titre est trop court. Il doit contenir au moins 3 caractères.";
+        return;
+    }
           // 1. Téléchargez l'image
           const formData = new FormData();
           formData.append('title', this.title);
