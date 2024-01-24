@@ -62,9 +62,11 @@ import { useRouter } from 'vue-router';
 import Button_Plus from '@/components/Button_Plus.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { AuthService } from '@/security/auth-service';
 
 const voyages = ref([]);
 const router = useRouter();
+const userId = ref('');
 
 const editedVoyage = ref({
   id: null,
@@ -76,8 +78,12 @@ const editingMode = ref(false);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('https://my-travel-log-cfax.onrender.com/api/trips');
-    voyages.value = response.data;
+    const userID = await AuthService.getUser();
+    if (userID) {
+      userId.value = userID.id;
+      const response = await axios.get(`https://my-travel-log-cfax.onrender.com/api/trips?user=${userId.value}`);
+      voyages.value = response.data;
+    }
   } catch (error) {
     console.error('Erreur lors de la récupération des voyages :', error);
   }
