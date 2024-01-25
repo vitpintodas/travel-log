@@ -14,10 +14,10 @@
         <ion-card-content>
           <ion-card-title>Lieux</ion-card-title>
           <ion-list>
-            <ion-item @click="toggleSortSection" button>
+            <!-- <ion-item @click="toggleSortSection" button>
               <ion-button>Trier</ion-button>
-            </ion-item>
-            <ion-item v-if="sortSectionOpen">
+            </ion-item> -->
+            <!-- <ion-item v-if="sortSectionOpen">
               <ion-segment v-model="sortOption">
                 <ion-segment-button value="nameAsc">
                   <ion-label>A-Z</ion-label>
@@ -26,7 +26,7 @@
                   <ion-label>Z-A</ion-label>
                 </ion-segment-button>
               </ion-segment>
-            </ion-item>
+            </ion-item> -->
           </ion-list>
           <ion-list>
             <ion-item v-if="!sortedPlaces || sortedPlaces.length === 0">
