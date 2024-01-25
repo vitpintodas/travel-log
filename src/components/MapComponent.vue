@@ -203,7 +203,7 @@ export default {
 #locate-me {
   position: absolute;
   top: 3vh; /* Position below the filter container */
-  left: 25vw;
+  left: 80vw;
   z-index: 1000;
   padding: 10px;
   border: none;
