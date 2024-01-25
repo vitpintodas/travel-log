@@ -54,12 +54,12 @@
               v-if="editingMode && editedVoyage.id === voyage.id"
             >
               <ion-item>
-                <ion-label position="floating">Nouveau titre</ion-label>
-                <ion-input v-model="editedVoyage.title"></ion-input>
+                <!-- <ion-label position="floating">Nouveau titre</ion-label> -->
+                <ion-input label="Nouveau titre" label-placement="floating" v-model="editedVoyage.title"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Nouvelle description</ion-label>
-                <ion-input v-model="editedVoyage.description"></ion-input>
+                <!-- <ion-label position="floating">Nouvelle description</ion-label> -->
+                <ion-input label="Nouvelle description" label-placement="floating" v-model="editedVoyage.description"></ion-input>
               </ion-item>
 
               <!-- Affichage du message d'erreur si les champs sont vides -->
