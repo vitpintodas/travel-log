@@ -42,12 +42,11 @@ npm run dev
 
 :page_facing_up: **Étape 5 - Détails du voyage :** :page_facing_up:
 
-- En savoir plus
+- Voir détails
 
 :round_pushpin: **Étape 6 - Ajouter un lieu :** :round_pushpin:
 
-- Sous l'onglet voyage ✈️
-- Dans le détail de votre voyage (en savoir plus)
+- Dans le détail de votre voyage (étape 5)
 - Ajouter un lieu
 - Remplir les champs d’informations
     - Choisir le lieu sur la carte
