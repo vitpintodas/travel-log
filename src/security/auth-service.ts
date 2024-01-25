@@ -38,9 +38,6 @@ export class AuthService {
    * currently is an authenticated user.
    */
   static async getToken(): Promise<string | undefined> {
-    if(auth?.token) {
-      console.log(auth.token);
-    }
     return auth?.token;
   }
 

@@ -5,8 +5,8 @@ import TabsPage from "@/views/TabsPage.vue";
 import SignupPageVue from "@/views/SignupPage.vue";
 import LoginPageVue from "@/views/LoginPage.vue";
 import NewTrip from "@/views/NewTrip.vue";
-import NewPlace from '@/views/NewPlace.vue';
-import TripDetails from '@/views/TripDetails.vue';
+import NewPlace from "@/views/NewPlace.vue";
+import TripDetails from "@/views/TripDetails.vue";
 import PasswordPage from "@/views/PasswordPage.vue";
 import { onlyAuthenticated } from "@/security/only-authenticated.guard";
 
@@ -28,18 +28,18 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Tab1Page.vue"),
       },
       {
-        path: 'trip',
-        component: () => import('@/views/Trip.vue')
+        path: "trip",
+        component: () => import("@/views/Trip.vue"),
       },
       {
         path: "tab3",
         component: () => import("@/views/Tab3Page.vue"),
       },
       {
-        path: 'trip/new-trip',
-        component: () => import('@/views/NewTrip.vue')
+        path: "trip/new-trip",
+        component: () => import("@/views/NewTrip.vue"),
       },
-    ]
+    ],
   },
   {
     path: "/component",
@@ -67,22 +67,21 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginPageVue,
   },
   {
-  path : '/password',
-  name: 'PasswordPage',
-  component: PasswordPage
-},
-{
-  path : '/new-place',
-  name: 'NewPlace',
-  component: () => import('@/views/NewPlace.vue')
-},
-{
-  path : '/trip-details/:id',
-  name: 'TripDetails',
-  component: () => import('@/views/TripDetails.vue')
-}
- 
-]
+    path: "/password",
+    name: "PasswordPage",
+    component: PasswordPage,
+  },
+  {
+    path: "/new-place",
+    name: "NewPlace",
+    component: () => import("@/views/NewPlace.vue"),
+  },
+  {
+    path: "/trip-details/:id",
+    name: "TripDetails",
+    component: () => import("@/views/TripDetails.vue"),
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

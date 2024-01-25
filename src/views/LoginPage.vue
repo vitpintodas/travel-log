@@ -64,7 +64,7 @@ export default {
       console.log('Formulaire soumis !', this.username, this.password);
       try {
         await AuthService.logIn(authRequest);
-        this.$router.push('trip');
+        this.$router.push('/tabs/trip');
       } catch (error) {
         if (error instanceof AxiosError)
         {
