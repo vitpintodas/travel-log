@@ -183,6 +183,7 @@ export default {
 
         const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', requestBody, {
           headers: {
+            // TODO: changer token pour utilisateur
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
             'Content-Type': 'application/json',
           },
