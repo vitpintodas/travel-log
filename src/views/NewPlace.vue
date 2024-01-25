@@ -8,12 +8,11 @@
     <ion-content>
       <ion-list>
         <ion-item>
-  <ion-input label="Lieu" v-model="place.name" :class="{ 'ion-invalid': titleError }"></ion-input>
-  <ion-text color="danger" v-if="titleError">Le titre doit avoir entre 3 et 100 caractères.</ion-text>
-  <ion-input label="Description" v-model="place.description" :class="{ 'ion-invalid': descriptionError }"></ion-input>
-  <ion-text color="danger" v-if="descriptionError">La description doit avoir entre 5 et 50000 caractères.</ion-text>
-</ion-item>
-
+          <ion-input label="Lieu" v-model="place.name" :class="{ 'ion-invalid': titleError }"></ion-input>
+          <ion-text color="danger" v-if="titleError">Le titre doit avoir entre 3 et 100 caractères.</ion-text>
+          <ion-input label="Description" v-model="place.description" :class="{ 'ion-invalid': descriptionError }"></ion-input>
+          <ion-text color="danger" v-if="descriptionError">La description doit avoir entre 5 et 50000 caractères.</ion-text>
+        </ion-item>
 
         <ion-item style="height: 400px; align-items: center;">
           <ion-label style="font-weight: bold; font-size: large;" position="stacked">Position</ion-label>
@@ -73,7 +72,7 @@ export default {
   data() {
     return {
       place: {
-        tripId: '', // Ajoutez cette ligne pour inclure le tripId
+        tripId: '',
         name: '',
         description: '',
         location: {
@@ -132,65 +131,62 @@ export default {
       }
     },
     validateTitle() {
-  const title = this.place.name.trim();
-  const isValid = title.length >= 3 && title.length <= 100;
-  this.titleError = !isValid; // Mettez cette ligne avant le retour
-  return isValid;
-},
-validateDescription() {
-  const description = this.place.description.trim();
-  const isValid = description.length >= 5 && description.length <= 50000;
-  this.descriptionError = !isValid; // Mettez cette ligne avant le retour
-  return isValid;
-},
-
+      const title = this.place.name.trim();
+      const isValid = title.length >= 3 && title.length <= 100;
+      this.titleError = !isValid;
+      return isValid;
+    },
+    validateDescription() {
+      const description = this.place.description.trim();
+      const isValid = description.length >= 5 && description.length <= 50000;
+      this.descriptionError = !isValid;
+      return isValid;
+    },
 
     async submitForm() {
       try {
         const tripId = this.$route.params.id;
 
         if (!this.validateTitle()) {
-        // Afficher un message d'erreur ou gérer la validation d'une autre manière
-        console.error('Erreur : Le titre doit avoir entre 3 et 100 caractères.');
-        return;
-      }
+          console.error('Erreur : Le titre doit avoir entre 3 et 100 caractères.');
+          return;
+        }
 
-      if (!this.validateDescription()) {
-  // Afficher un message d'erreur ou gérer la validation d'une autre manière
-  console.error('Erreur : La description doit avoir entre 5 et 50000 caractères.');
-  return;
-}
+        if (!this.validateDescription()) {
+          console.error('Erreur : La description doit avoir entre 5 et 50000 caractères.');
+          return;
+        }
 
+        const imageData = {
+          data: await this.convertImageToBase64(this.place.photo),
+        };
 
+        const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', imageData, {
+          headers: {
+            'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
+            'Content-Type': 'application/json',
+          },
+        });
 
-        console.log('tripId:', tripId);
-        console.log('place:', this.place);
-        console.log('place.name:', this.place.name);
-        console.log('place.description:', this.place.description);
-        console.log('place.location:', this.place.location);
+        this.place.pictureUrl = imageResponse.data.url;
 
         const requestBody = {
           name: this.place.name,
           description: this.place.description,
-          tripId: tripId, // Utilisez la variable tripId
+          tripId: tripId,
           location: {
             type: 'Point',
             coordinates: [this.place.location.latitude, this.place.location.longitude],
           },
-          //pictureUrl: '', // Vous pouvez ajouter une URL de l'image si nécessaire
+          pictureUrl: this.place.pictureUrl,
         };
 
-        console.log('Request Body:', requestBody);
-
-        // Envoyez la requête avec Axios
         const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', requestBody, {
           headers: {
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
             'Content-Type': 'application/json',
           },
         });
-
-        console.log('Response after submitting form:', response);
 
         if (response.status === 201) {
           console.log('Place ajoutée avec succès !');
@@ -209,6 +205,20 @@ validateDescription() {
     handleFileChange(event: Event) {
       const target = event.target as HTMLInputElement;
       this.place.photo = target.files?.[0] ?? null;
+    },
+
+    async convertImageToBase64(image) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(image);
+      });
     },
   },
 
