@@ -29,11 +29,12 @@
             </ion-item>
           </ion-list>
           <ion-list>
-            <ion-item v-if="trip.places.length === 0">
+            <ion-item v-if="!sortedPlaces || sortedPlaces.length === 0">
               <ion-label>Aucun lieu pour le moment</ion-label>
             </ion-item>
             <ion-item v-for="place in sortedPlaces" :key="place.id">
               <ion-label>{{ place.name }}</ion-label>
+              <p>{{ place.description }}</p> <!-- Ajout de la description ici -->
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -70,7 +71,7 @@ export default defineComponent({
   data() {
     return {
       trip: {
-        name: '',
+        title: '',
         description: '',
         places: [],
       },
@@ -96,19 +97,40 @@ export default defineComponent({
 
   computed: {
     sortedPlaces() {
-    
-      return this.trip.places;
+      if (this.sortOption === 'nameAsc') {
+        // Tri A-Z
+        return this.trip.places.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (this.sortOption === 'nameDesc') {
+        // Tri Z-A
+        return this.trip.places.sort((a, b) => b.name.localeCompare(a.name));
+      } else {
+        // Aucun tri
+        return this.trip.places;
+      }
     },
   },
   created() {
-    // Récupérer l'ID du voyage à partir des paramètres de la route
     const tripId = this.$route.params.id;
 
-    // Faire une requête API pour obtenir les détails du voyage
+    // Récupérer les détails du voyage
     axios.get(`https://my-travel-log-cfax.onrender.com/api/trips/${tripId}`)
       .then(response => {
         console.log('Réponse de l\'API pour le voyage :', response.data);
         this.trip = response.data;
+
+        // Récupérer les lieux associés à ce voyage
+        axios.get(`https://my-travel-log-cfax.onrender.com/api/places`, {
+          params: {
+            trip: tripId,
+          },
+        })
+          .then(placesResponse => {
+            console.log('Réponse de l\'API pour les lieux :', placesResponse.data);
+            this.trip.places = placesResponse.data;
+          })
+          .catch(placesError => {
+            console.error('Erreur lors de la récupération des lieux :', placesError);
+          });
       })
       .catch(error => {
         console.error('Erreur lors de la récupération des détails du voyage :', error);

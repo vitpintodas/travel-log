@@ -8,7 +8,10 @@
     <ion-content>
       <ion-list>
         <ion-item>
-          <ion-input label="Lieu" v-model="place.name"></ion-input>
+          <ion-input label="Lieu" v-model="place.name" :class="{ 'ion-invalid': titleError }"></ion-input>
+          <ion-text color="danger" v-if="titleError">Le titre doit avoir entre 3 et 100 caractères.</ion-text>
+          <ion-input label="Description" v-model="place.description" :class="{ 'ion-invalid': descriptionError }"></ion-input>
+          <ion-text color="danger" v-if="descriptionError">La description doit avoir entre 5 et 50000 caractères.</ion-text>
         </ion-item>
 
         <ion-item style="height: 400px; align-items: center;">
@@ -26,8 +29,6 @@
           <ion-input type="file" @change="handleFileChange"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-textarea style="font-weight: bold;" position="stacked">Description</ion-textarea>
-          <ion-textarea style="max-height: 20px;  width: 50%;" v-model="place.description"></ion-textarea>
         </ion-item>
       </ion-list>
       <ion-button @click="submitForm" expand="block">Envoyer</ion-button>
@@ -71,6 +72,7 @@ export default {
   data() {
     return {
       place: {
+        tripId: '',
         name: '',
         description: '',
         location: {
@@ -78,12 +80,14 @@ export default {
           longitude: 0,
         },
         photo: null as File | null,
-        pictureUrl: '', // Utiliser pictureUrl au lieu de imageUrl
+        pictureUrl: '',
       },
       map: undefined,
       userLocation: undefined,
       selectedLocations: [],
       allLocations: [],
+      titleError: false,
+      descriptionError: false,
     };
   },
 
@@ -126,73 +130,96 @@ export default {
         this.place.location.longitude = selectedLocation.lng;
       }
     },
+    validateTitle() {
+      const title = this.place.name.trim();
+      const isValid = title.length >= 3 && title.length <= 100;
+      this.titleError = !isValid;
+      return isValid;
+    },
+    validateDescription() {
+      const description = this.place.description.trim();
+      const isValid = description.length >= 5 && description.length <= 50000;
+      this.descriptionError = !isValid;
+      return isValid;
+    },
+
     async submitForm() {
       try {
-        console.log('Starting submitForm');
+        const tripId = this.$route.params.id;
 
-        const formData = new FormData();
-        formData.append('name', this.place.name);
-        formData.append('description', this.place.description);
-        formData.append('location', JSON.stringify(this.place.location));
-        formData.append('tripHref', '...'); // ou
-        formData.append('tripId', '...');
-
-
-         // Convertir les coordonnées en GeoJSON
-        const geoJsonLocation = {
-          type: 'Point',
-          coordinates: [this.place.location.longitude, this.place.location.latitude],
-         };
-        formData.append('location', JSON.stringify(geoJsonLocation));
-
-        // Téléchargez l'image avec le champ pictureUrl
-        const imageFormData = new FormData();
-        imageFormData.append('image', this.place.photo as File);
-
-        console.log('Before image upload');
-        const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', imageFormData, {
-          headers: {
-            'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        console.log('After image upload', imageResponse);
-
-        // Utilisez pictureUrl au lieu de imageUrl
-        this.place.pictureUrl = imageResponse.data.url;
-        formData.append('pictureUrl', this.place.pictureUrl);
-        console.log('Image téléchargée avec succès:', this.place.pictureUrl);
-
-        console.log('Before place creation');
-        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
-          },
-        });
-        console.log('After place creation');
-
-        console.log('Response:', response);
-
-        if (response.status === 201) {
-          console.log('Place added successfully!');
-        } else {
-          console.error('Error adding place.');
+        if (!this.validateTitle()) {
+          console.error('Erreur : Le titre doit avoir entre 3 et 100 caractères.');
+          return;
         }
 
-        console.log('End of submitForm');
+        if (!this.validateDescription()) {
+          console.error('Erreur : La description doit avoir entre 5 et 50000 caractères.');
+          return;
+        }
+
+        const imageData = {
+          data: await this.convertImageToBase64(this.place.photo),
+        };
+
+        const imageResponse = await axios.post('https://comem-qimg.onrender.com/api/images/', imageData, {
+          headers: {
+            'Authorization': 'Bearer IruLClhSUlGScM7iJgC2q3KgFGknD969lS3y6cYbC9etDPW8bIutIgFeum+wFxjqm/N1QKQXNy+cV9EiDhXi+QvbOZJTdMewAv/w8Yh6B3yUzZiJoQEZyEC3DGYWnbW/CUxW8QqWORiCcvjGPiUCFGWVXwPLKOkRiHXs/1Ms+fQ=',
+            'Content-Type': 'application/json',
+          },
+        });
+
+        this.place.pictureUrl = imageResponse.data.url;
+
+        const requestBody = {
+          name: this.place.name,
+          description: this.place.description,
+          tripId: tripId,
+          location: {
+            type: 'Point',
+            coordinates: [this.place.location.latitude, this.place.location.longitude],
+          },
+          pictureUrl: this.place.pictureUrl,
+        };
+
+        const response = await axios.post('https://my-travel-log-cfax.onrender.com/api/places', requestBody, {
+          headers: {
+            // TODO: changer token pour utilisateur
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDcxMjkxNjUuNjI2LCJzdWIiOiIyMmYwYjNiMi0yM2VmLTRlNTEtYmVhYS1kYjFiNTdjYWY3MTEiLCJpYXQiOjE3MDU5MTk1NjV9.7Nm5n3viZD-qE9hYxw89FKi2Y0cb4eAaPzEA2gVHfkU',
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 201) {
+          console.log('Place ajoutée avec succès !');
+          this.$router.push({ name: 'TripDetails', params: { id: tripId } });
+        } else {
+          console.error('Erreur lors de l\'ajout du lieu :', response.status);
+        }
       } catch (error) {
-        console.error('Error in submitForm:', error);
+        console.error('Erreur lors de la requête:', error);
 
         if (error.response) {
-          console.error('Detailed server response:', error.response.data);
+          console.error('Réponse détaillée du serveur:', error.response.data);
         }
       }
     },
-    handleFileChange(event:Event) {
+    handleFileChange(event: Event) {
       const target = event.target as HTMLInputElement;
       this.place.photo = target.files?.[0] ?? null;
+    },
+
+    async convertImageToBase64(image) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(image);
+      });
     },
   },
 
@@ -204,28 +231,28 @@ export default {
 </script>
 
 <style scoped>
-#map-container {
-  height: 50%;
-  width: 100%;
-  position: fixed;
-  top: 50;
-  left: 100;
-}
+  #map-container {
+    height: 50%;
+    width: 100%;
+    position: fixed;
+    top: 50;
+    left: 100;
+  }
 
-#map {
-  bottom: -40px;
-  height: 50%;
-  width: 100%;
-}
+  #map {
+    bottom: -40px;
+    height: 50%;
+    width: 100%;
+  }
 
-input[type="text"] {
-  border: 1px solid #ccc;
-  top: 15px;
-  width: 100%;
-  height: 100%;
-  padding: 5px;
-  border-radius: 4px;
-  padding: 20px;
-  width: 400px;
-}
+  input[type="text"] {
+    border: 1px solid #ccc;
+    top: 15px;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    padding: 20px;
+    width: 400px;
+  }
 </style>
