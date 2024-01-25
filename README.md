@@ -4,9 +4,7 @@
 ---
 
 ## Disclaimer :
-- En général, les temps de chargement des données de l'API peuvent prend du temps.
-- En passant d'une page à une autre, il se peut que les icônes de la navigation ne fonctionnent pas, merci de bien recharger la page.
-- Dès l'ajout de voyage ou de lieu, il se peut que le rechargement de la page soit nécessaire pour visualiser l'ajout. 
+- En général, les temps de chargement des données de l'API peuvent prendre du temps.
 
 Nous vous souhaitons un bon voyage sur notre API !
   
