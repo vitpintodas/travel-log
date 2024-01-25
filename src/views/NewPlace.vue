@@ -8,9 +8,12 @@
     <ion-content>
       <ion-list>
         <ion-item>
-          <ion-input label="Lieu" v-model="place.name"></ion-input>
-          <ion-input label="Description" v-model="place.description"></ion-input>
-        </ion-item>
+  <ion-input label="Lieu" v-model="place.name" :class="{ 'ion-invalid': titleError }"></ion-input>
+  <ion-text color="danger" v-if="titleError">Le titre doit avoir entre 3 et 100 caractères.</ion-text>
+  <ion-input label="Description" v-model="place.description" :class="{ 'ion-invalid': descriptionError }"></ion-input>
+  <ion-text color="danger" v-if="descriptionError">La description doit avoir entre 5 et 50000 caractères.</ion-text>
+</ion-item>
+
 
         <ion-item style="height: 400px; align-items: center;">
           <ion-label style="font-weight: bold; font-size: large;" position="stacked">Position</ion-label>
@@ -84,6 +87,8 @@ export default {
       userLocation: undefined,
       selectedLocations: [],
       allLocations: [],
+      titleError: false,
+      descriptionError: false,
     };
   },
 
@@ -126,9 +131,37 @@ export default {
         this.place.location.longitude = selectedLocation.lng;
       }
     },
+    validateTitle() {
+  const title = this.place.name.trim();
+  const isValid = title.length >= 3 && title.length <= 100;
+  this.titleError = !isValid; // Mettez cette ligne avant le retour
+  return isValid;
+},
+validateDescription() {
+  const description = this.place.description.trim();
+  const isValid = description.length >= 5 && description.length <= 50000;
+  this.descriptionError = !isValid; // Mettez cette ligne avant le retour
+  return isValid;
+},
+
+
     async submitForm() {
       try {
         const tripId = this.$route.params.id;
+
+        if (!this.validateTitle()) {
+        // Afficher un message d'erreur ou gérer la validation d'une autre manière
+        console.error('Erreur : Le titre doit avoir entre 3 et 100 caractères.');
+        return;
+      }
+
+      if (!this.validateDescription()) {
+  // Afficher un message d'erreur ou gérer la validation d'une autre manière
+  console.error('Erreur : La description doit avoir entre 5 et 50000 caractères.');
+  return;
+}
+
+
 
         console.log('tripId:', tripId);
         console.log('place:', this.place);
