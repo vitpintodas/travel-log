@@ -2,6 +2,13 @@
 
 📱Bienvenue sur l’API TravelLog, ce guide vous explique comment voyager à travers notre application. 📱
 ---
+
+# # Disclaimer :
+- En général, les temps de chargement des données de l'API peuvent prend du temps.
+- En passant d'une page à une autre, il se peut que les icônes de la navigation ne fonctionnent pas, merci de bien recharger la page.
+
+Nous vous souhaitons un bon voyage sur notre API !
+  
 :construction: **Étape 0 - Installation** :construction:
 
 - Dans le terminal, à la racine du dossier
@@ -38,6 +45,8 @@ npm run dev
 
 :round_pushpin: **Étape 6 - Ajouter un lieu :** :round_pushpin:
 
+- Sous l'onglet voyage ✈️
+- Dans le détail de votre voyage (en savoir plus)
 - Ajouter un lieu
 - Remplir les champs d’informations
     - Choisir le lieu sur la carte
@@ -61,8 +70,8 @@ npm run dev
 
 :x: **Étape 9 - Suppression voyage** :x:
 
-- Sur la page du détail du voyage
-- Supprimer voyage
+- Sur la page des voyages ✈️
+- Cliquer sur le bouton supprimer voyage
 
 :pencil2: **Étape 10 - Modifier le profil utilisateur** :pencil2:
 
