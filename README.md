@@ -3,7 +3,7 @@
 📱Bienvenue sur l’API TravelLog, ce guide vous explique comment voyager à travers notre application. 📱
 ---
 
-# # Disclaimer :
+## Disclaimer :
 - En général, les temps de chargement des données de l'API peuvent prend du temps.
 - En passant d'une page à une autre, il se peut que les icônes de la navigation ne fonctionnent pas, merci de bien recharger la page.
 
