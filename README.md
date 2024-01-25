@@ -57,7 +57,7 @@ npm run dev
 
 - Sous l’onglet carte 🗺️
 - Filtrer la recherche en sélectionnant le voyage
-- Cliquer sur les pin lieux enregistrés pour avoir les informations du lieu
+- Cliquer sur les pins lieux enregistrés pour avoir les informations du lieu
 
 :x: **Étape 9 - Suppression voyage** :x:
 
