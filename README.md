@@ -6,6 +6,7 @@
 ## Disclaimer :
 - En général, les temps de chargement des données de l'API peuvent prend du temps.
 - En passant d'une page à une autre, il se peut que les icônes de la navigation ne fonctionnent pas, merci de bien recharger la page.
+- Dès l'ajout de voyage ou de lieu, il se peut que le rechargement de la page soit nécessaire pour visualiser l'ajout. 
 
 Nous vous souhaitons un bon voyage sur notre API !
   
@@ -52,15 +53,6 @@ npm run dev
     - Choisir le lieu sur la carte
 - Soumettre
 
-:1234: **Étape 7 - Trier les lieux** :1234:
-
-- Pour trier, créer un deuxième lieu (étape 6)
-- Trier
-    - A à Z
-    
-    ou
-    
-    - Z à A
 
 :world_map: **Étape 8 - Visualiser les lieux** :world_map:
 
