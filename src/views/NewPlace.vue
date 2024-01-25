@@ -175,7 +175,7 @@ validateDescription() {
           tripId: tripId, // Utilisez la variable tripId
           location: {
             type: 'Point',
-            coordinates: [this.place.location.longitude, this.place.location.latitude],
+            coordinates: [this.place.location.latitude, this.place.location.longitude],
           },
           //pictureUrl: '', // Vous pouvez ajouter une URL de l'image si nécessaire
         };

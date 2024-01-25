@@ -34,6 +34,7 @@
             </ion-item>
             <ion-item v-for="place in sortedPlaces" :key="place.id">
               <ion-label>{{ place.name }}</ion-label>
+              <p>{{ place.description }}</p> <!-- Ajout de la description ici -->
             </ion-item>
           </ion-list>
         </ion-card-content>
